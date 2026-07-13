@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Fleet - The Charter Guy</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Playfair+Display:wght@600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:wght@100..900&display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "tertiary-container": "#101316",
+                            "surface-container": "#201f1f",
+                            "on-primary-fixed": "#151b2b",
+                            "on-primary": "#293041",
+                            "background": "#131313",
+                            "primary-container": "#0b1221",
+                            "inverse-surface": "#e5e2e1",
+                            "surface-dim": "#131313",
+                            "tertiary-fixed-dim": "#c4c7ca",
+                            "on-surface-variant": "#c6c6cd",
+                            "error": "#ffb4ab",
+                            "tertiary": "#c4c7ca",
+                            "surface-container-high": "#2a2a2a",
+                            "on-secondary-fixed-variant": "#5d4201",
+                            "secondary-fixed-dim": "#e9c176",
+                            "secondary": "#e9c176",
+                            "on-primary-fixed-variant": "#404758",
+                            "on-tertiary-fixed": "#191c1f",
+                            "surface-tint": "#c0c6db",
+                            "outline-variant": "#45464c",
+                            "on-error-container": "#ffdad6",
+                            "inverse-on-surface": "#313030",
+                            "on-surface": "#e5e2e1",
+                            "outline": "#909097",
+                            "surface-container-low": "#1c1b1b",
+                            "primary-fixed-dim": "#c0c6db",
+                            "on-secondary": "#412d00",
+                            "secondary-container": "#604403",
+                            "surface-container-lowest": "#0e0e0e",
+                            "on-tertiary": "#2d3134",
+                            "on-primary-container": "#777d90",
+                            "surface-bright": "#393939",
+                            "primary-fixed": "#dce2f8",
+                            "on-secondary-fixed": "#261900",
+                            "error-container": "#93000a",
+                            "on-background": "#e5e2e1",
+                            "surface-container-highest": "#353534",
+                            "on-tertiary-container": "#7b7e81",
+                            "secondary-fixed": "#ffdea5",
+                            "surface-variant": "#353534",
+                            "primary": "#c0c6db",
+                            "on-error": "#690005",
+                            "on-tertiary-fixed-variant": "#44474a",
+                            "inverse-primary": "#575e70",
+                            "tertiary-fixed": "#e0e2e6",
+                            "on-secondary-container": "#dab36a",
+                            "surface": "#131313"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.125rem",
+                            "lg": "0.25rem",
+                            "xl": "0.5rem",
+                            "full": "0.75rem"
+                    },
+                    "spacing": {
+                            "margin-mobile": "20px",
+                            "gutter": "24px",
+                            "section-gap": "120px",
+                            "unit": "8px",
+                            "margin-desktop": "64px",
+                            "container-max": "1280px"
+                    },
+                    "fontFamily": {
+                            "body-md": ["Inter"],
+                            "label-sm": ["Inter"],
+                            "headline-md": ["Playfair Display"],
+                            "body-lg": ["Inter"],
+                            "display-lg": ["Playfair Display"],
+                            "headline-lg": ["Playfair Display"],
+                            "display-lg-mobile": ["Playfair Display"]
+                    },
+                    "fontSize": {
+                            "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                            "label-sm": ["12px", {"lineHeight": "1", "letterSpacing": "0.08em", "fontWeight": "600"}],
+                            "headline-md": ["24px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                            "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                            "display-lg": ["64px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                            "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                            "display-lg-mobile": ["40px", {"lineHeight": "1.2", "fontWeight": "700"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, #1A1A1A 25%, #242424 50%, #1A1A1A 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .gold-glow:hover {
+            box-shadow: 0 0 20px rgba(233, 193, 118, 0.2);
+        }
+
+        .underline-input {
+            border: none;
+            border-bottom: 1px solid rgba(229, 231, 235, 0.1);
+            background: transparent;
+            padding-left: 0;
+        }
+        .underline-input:focus {
+            border-bottom-color: #e9c176;
+            outline: none;
+            box-shadow: none;
+        }
+
+        .glass-card {
+            background: rgba(26, 26, 26, 0.6);
+            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(229, 231, 235, 0.05);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-outline-variant/10">
+<div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-unit max-w-container-max mx-auto h-20">
+<a href="code.html" class="font-display-lg-mobile text-[24px] md:text-display-lg-mobile uppercase tracking-widest text-secondary font-headline-lg">
+            THE CHARTER GUY
+        </a>
+<!-- Desktop Links -->
+<div class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-label-sm text-label-sm" href="code.html#charters">Charters</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-label-sm text-label-sm" href="code.html#sales">Sales</a>
+<a class="text-secondary border-b-2 border-secondary pb-1 font-label-sm text-label-sm" href="fleet.html">Fleet</a>
+<a class="text-on-surface-variant hover:text-on-surface transition-colors font-label-sm text-label-sm" href="code.html#why-us">Why Us</a>
+<a class="bg-secondary text-on-secondary px-6 py-3 font-label-sm text-label-sm hover:opacity-90 active:scale-95 transition-all" href="code.html#contact">
+            Request Quote
+        </a>
+</div>
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-on-surface" id="mobile-menu-btn">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</nav>
+<!-- Mobile Menu Overlay -->
+<div class="fixed inset-0 bg-background z-[60] flex flex-col items-center justify-center gap-8 transition-transform duration-500 translate-x-full md:hidden" id="mobile-menu">
+<button class="absolute top-8 right-8 text-on-surface" id="close-menu-btn">
+<span class="material-symbols-outlined">close</span>
+</button>
+<a class="font-display-lg-mobile text-on-surface" href="code.html#charters">Charters</a>
+<a class="font-display-lg-mobile text-on-surface" href="code.html#sales">Sales</a>
+<a class="font-display-lg-mobile text-secondary" href="fleet.html">Fleet</a>
+<a class="font-display-lg-mobile text-on-surface" href="code.html#why-us">Why Us</a>
+<a class="bg-secondary text-on-secondary px-10 py-4 font-label-sm text-label-sm mt-4" href="code.html#contact">Request Quote</a>
+</div>
+<!-- Hero Section for Fleet -->
+<section class="relative pt-32 pb-20 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<div class="text-center">
+<span class="text-secondary font-label-sm text-label-sm uppercase tracking-widest block mb-4">Our Fleet</span>
+<h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-6">
+            Explore Our Global Fleet
+        </h1>
+<p class="text-on-surface-variant max-w-2xl mx-auto mb-10">
+            Access to over 20,000 aircraft worldwide. Find the perfect jet for your needs, from turboprops to heavy long-range aircraft.
+        </p>
+</div>
+</section>
+<!-- Fleet Filters -->
+<section class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto mb-16">
+<div class="flex flex-wrap items-center justify-center gap-4">
+<button class="filter-btn px-6 py-3 border-2 border-secondary text-secondary font-label-sm text-label-sm flex items-center gap-2 active" data-filter="all">
+<div class="w-1.5 h-1.5 rounded-full bg-secondary"></div> All Fleet
+</button>
+<button class="filter-btn px-6 py-3 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary hover:text-secondary transition-colors" data-filter="turboprop">
+Turboprop
+</button>
+<button class="filter-btn px-6 py-3 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary hover:text-secondary transition-colors" data-filter="light-jet">
+Light Jet
+</button>
+<button class="filter-btn px-6 py-3 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary hover:text-secondary transition-colors" data-filter="mid-size">
+Mid-Size
+</button>
+<button class="filter-btn px-6 py-3 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary hover:text-secondary transition-colors" data-filter="heavy-jet">
+Heavy Jet
+</button>
+</div>
+</section>
+<!-- Fleet Section -->
+<section class="pb-section-gap px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto" id="fleet">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<!-- Fleet Card 1 -->
+<div class="fleet-card group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-category="turboprop" data-aircraft-name="Pilatus PC-12" data-aircraft-passengers="6-8 PAX" data-aircraft-range="1,803 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuAGe8IE3NUBX_uTI8YmJ14DIRlRv8OB_cJ4Z6QAGJoZ8b_TDkdpe7jVUgT1wRmF6q3ohIadXVL7gxbIg4ozDRXFc9f_Aj0sWiFLYSRISsPnhEhiOK-Pswq7mc184qC96FnD2A-p37Wb2euDFNQbwD9Q_-Jiv-uLA3zFBZnbQre12BkkUdCTtDdS7SkL6_4rssQazFxtPA0MTZfpFFVgD53dZxvh82Vaig7sXWj2h65_iBHgXp_RtTQu4g">
+<div class="aspect-[16/10] overflow-hidden relative">
+<div class="fleet-card-image w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A professional studio photograph of a Pilatus PC-12 NGX on a clean hangar floor." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGe8IE3NUBX_uTI8YmJ14DIRlRv8OB_cJ4Z6QAGJoZ8b_TDkdpe7jVUgT1wRmF6q3ohIadXVL7gxbIg4ozDRXFc9f_Aj0sWiFLYSRISsPnhEhiOK-Pswq7mc184qC96FnD2A-p37Wb2euDFNQbwD9Q_-Jiv-uLA3zFBZnbQre12BkkUdCTtDdS7SkL6_4rssQazFxtPA0MTZfpFFVgD53dZxvh82Vaig7sXWj2h65_iBHgXp_RtTQu4g')"></div>
+</div>
+<div class="p-8">
+<span class="text-[10px] text-tertiary uppercase tracking-widest mb-2 block">Turboprop</span>
+<h3 class="font-headline-md text-headline-md text-white mb-6">Pilatus PC-12</h3>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Passengers</p>
+<p class="text-white font-semibold">6-8 PAX</p>
+</div>
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Max Range</p>
+<p class="text-white font-semibold">1,803 NM</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">View Aircraft</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">Request Quote</button>
+</div>
+</div>
+</div>
+<!-- Fleet Card 2 -->
+<div class="fleet-card group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-category="light-jet" data-aircraft-name="Phenom 300E" data-aircraft-passengers="7-9 PAX" data-aircraft-range="2,010 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuBSTZzhnBfHVrZibvM-vFlo8yqfp506jtawvA45A32xRG2IigR-wLzHGGlOQYxzk6h8yFWj_Z__0uk4QW8EbdDBbSAH1k3AIQVG1LZkMiv5DFjKijb5lcquq_HA3R2zFasYOG5qWzN8ERAn9q_Cztzo1nQ6lorwB7SkESw7YJ3spcd9M-vSeEENmVceHW9vUC1XOdNQsMqomjZw0-zwR6qOaK7VB5lE4jXKgfbbJ01xEI_lY81hNnP-dQ">
+<div class="aspect-[16/10] overflow-hidden">
+<div class="fleet-card-image w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="An exterior view of an Embraer Phenom 300E in flight against a sunset sky." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBSTZzhnBfHVrZibvM-vFlo8yqfp506jtawvA45A32xRG2IigR-wLzHGGlOQYxzk6h8yFWj_Z__0uk4QW8EbdDBbSAH1k3AIQVG1LZkMiv5DFjKijb5lcquq_HA3R2zFasYOG5qWzN8ERAn9q_Cztzo1nQ6lorwB7SkESw7YJ3spcd9M-vSeEENmVceHW9vUC1XOdNQsMqomjZw0-zwR6qOaK7VB5lE4jXKgfbbJ01xEI_lY81hNnP-dQ')"></div>
+</div>
+<div class="p-8">
+<span class="text-[10px] text-tertiary uppercase tracking-widest mb-2 block">Light Jet</span>
+<h3 class="font-headline-md text-headline-md text-white mb-6">Phenom 300E</h3>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Passengers</p>
+<p class="text-white font-semibold">7-9 PAX</p>
+</div>
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Max Range</p>
+<p class="text-white font-semibold">2,010 NM</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">View Aircraft</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">Request Quote</button>
+</div>
+</div>
+</div>
+<!-- Fleet Card 3 -->
+<div class="fleet-card group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-category="mid-size" data-aircraft-name="Citation Latitude" data-aircraft-passengers="9 PAX" data-aircraft-range="2,700 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuAbQVe5RtCXFYYtmBtOWW17nynDcxzmpe9eKPnB2jc9-d44gPSY1_8SJ-jth45Tm-r07IAa-AWGtqYE49XlLU4aQKq4EjY8u8T1hT1FKCyMCpRXvmjxHG4VcURxHAYJScmF4_a9PjGMB3fv-ARnmlLMy-0pqADgJk9JziFUFgZ6j0g4warD-f14jzt2lFVw394jlb7bKVMgCijgDwzXShUyOwS_0wN9FJu7Pzc83Qm2zBP7RUYi3I5NNw">
+<div class="aspect-[16/10] overflow-hidden">
+<div class="fleet-card-image w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A side profile of a Cessna Citation Latitude parked on a wet tarmac." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbQVe5RtCXFYYtmBtOWW17nynDcxzmpe9eKPnB2jc9-d44gPSY1_8SJ-jth45Tm-r07IAa-AWGtqYE49XlLU4aQKq4EjY8u8T1hT1FKCyMCpRXvmjxHG4VcURxHAYJScmF4_a9PjGMB3fv-ARnmlLMy-0pqADgJk9JziFUFgZ6j0g4warD-f14jzt2lFVw394jlb7bKVMgCijgDwzXShUyOwS_0wN9FJu7Pzc83Qm2zBP7RUYi3I5NNw')"></div>
+</div>
+<div class="p-8">
+<span class="text-[10px] text-tertiary uppercase tracking-widest mb-2 block">Mid-Size</span>
+<h3 class="font-headline-md text-headline-md text-white mb-6">Citation Latitude</h3>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Passengers</p>
+<p class="text-white font-semibold">9 PAX</p>
+</div>
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Max Range</p>
+<p class="text-white font-semibold">2,700 NM</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">View Aircraft</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">Request Quote</button>
+</div>
+</div>
+</div>
+<!-- Fleet Card 4 -->
+<div class="fleet-card group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-category="mid-size" data-aircraft-name="Challenger 350" data-aircraft-passengers="10 PAX" data-aircraft-range="3,200 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuChRz9PRe9xdH9vd-PjJOtUzVpju1HME5BYUxw5_EnRUKpa_B6U2W4pfGNgUbAi5oWzfQUoZQ5g0oN8JnskXfElIOxyBAWi7Bx7LpQYL4rztyUReRfE0uusbiZww37iPSMikuXKmRi_uqkFoGcigwDSzkT5wtAT2KzLnCsyNP_vQxGoo0prmSQqvA5fj5uOSKft1wrP7xBh-JDKWJL-Z8nUS5H9DFlNoXhektRgrwJT9zO8ZjbM_VcZCA">
+<div class="aspect-[16/10] overflow-hidden">
+<div class="fleet-card-image w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="The elegant tail and engines of a Bombardier Challenger 350." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuChRz9PRe9xdH9vd-PjJOtUzVpju1HME5BYUxw5_EnRUKpa_B6U2W4pfGNgUbAi5oWzfQUoZQ5g0oN8JnskXfElIOxyBAWi7Bx7LpQYL4rztyUReRfE0uusbiZww37iPSMikuXKmRi_uqkFoGcigwDSzkT5wtAT2KzLnCsyNP_vQxGoo0prmSQqvA5fj5uOSKft1wrP7xBh-JDKWJL-Z8nUS5H9DFlNoXhektRgrwJT9zO8ZjbM_VcZCA')"></div>
+</div>
+<div class="p-8">
+<span class="text-[10px] text-tertiary uppercase tracking-widest mb-2 block">Mid-Size</span>
+<h3 class="font-headline-md text-headline-md text-white mb-6">Challenger 350</h3>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Passengers</p>
+<p class="text-white font-semibold">10 PAX</p>
+</div>
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Max Range</p>
+<p class="text-white font-semibold">3,200 NM</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">View Aircraft</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">Request Quote</button>
+</div>
+</div>
+</div>
+<!-- Fleet Card 5 -->
+<div class="fleet-card group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-category="heavy-jet" data-aircraft-name="Global 7500" data-aircraft-passengers="19 PAX" data-aircraft-range="7,700 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuDiAsxiLiChOYgvKZ4-USPW-Y_U7q1wWcOVIcM4bsn3veBiWg02rioP5_udQxIY3ax6EbyrjoAbj-74VDYxVQRiV13BBWnLaJ0zXciVq7SVrEyo3wpfTe9JUETufQITOTaLGGRvnVXO1TUI-jrvPrXqcsBBVTN_SZNj6U7qfVhfnqgNzhzyh8Qu9kft7qorVrauZOk9cZsSgYGYCIQoUsxLB1EtoBK_JX5Pe7Yy5RByVXXEFAlBX_2kNg">
+<div class="aspect-[16/10] overflow-hidden">
+<div class="fleet-card-image w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A wide angle shot of a Global 7500 on a mountain-surrounded runway in Switzerland." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDiAsxiLiChOYgvKZ4-USPW-Y_U7q1wWcOVIcM4bsn3veBiWg02rioP5_udQxIY3ax6EbyrjoAbj-74VDYxVQRiV13BBWnLaJ0zXciVq7SVrEyo3wpfTe9JUETufQITOTaLGGRvnVXO1TUI-jrvPrXqcsBBVTN_SZNj6U7qfVhfnqgNzhzyh8Qu9kft7qorVrauZOk9cZsSgYGYCIQoUsxLB1EtoBK_JX5Pe7Yy5RByVXXEFAlBX_2kNg')"></div>
+</div>
+<div class="p-8">
+<span class="text-[10px] text-tertiary uppercase tracking-widest mb-2 block">Heavy Jet</span>
+<h3 class="font-headline-md text-headline-md text-white mb-6">Global 7500</h3>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Passengers</p>
+<p class="text-white font-semibold">19 PAX</p>
+</div>
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Max Range</p>
+<p class="text-white font-semibold">7,700 NM</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">View Aircraft</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">Request Quote</button>
+</div>
+</div>
+</div>
+<!-- Fleet Card 6 -->
+<div class="fleet-card group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-category="heavy-jet" data-aircraft-name="Gulfstream G650" data-aircraft-passengers="13-16 PAX" data-aircraft-range="7,000 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuC-UpxfdSYm2nQ-7zfVNgX_9hrGdY_NJwROdea1-mqbyHUwYjvH3aCZyzxFQfUopzN1SYvtIXEeATeCrAYCazS7DLDoOpLy5A43HuB5Y1f1W3rczsJXnGEf7XDB02RiDGBcC-0cXnQT5dQTRQ4wT5IQeroaWtqzsi2Mrc8E_9cneH5O4DIeW4SSAGaswKNlCWRUqfoWaEaxyvHp6lMP1wWHf9zJoQb1vWxRV06ZYk8QGQsPrGa-SqIkPg">
+<div class="aspect-[16/10] overflow-hidden">
+<div class="fleet-card-image w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A Gulfstream G650ER climbing into a bright blue sky." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-UpxfdSYm2nQ-7zfVNgX_9hrGdY_NJwROdea1-mqbyHUwYjvH3aCZyzxFQfUopzN1SYvtIXEeATeCrAYCazS7DLDoOpLy5A43HuB5Y1f1W3rczsJXnGEf7XDB02RiDGBcC-0cXnQT5dQTRQ4wT5IQeroaWtqzsi2Mrc8E_9cneH5O4DIeW4SSAGaswKNlCWRUqfoWaEaxyvHp6lMP1wWHf9zJoQb1vWxRV06ZYk8QGQsPrGa-SqIkPg')"></div>
+</div>
+<div class="p-8">
+<span class="text-[10px] text-tertiary uppercase tracking-widest mb-2 block">Heavy Jet</span>
+<h3 class="font-headline-md text-headline-md text-white mb-6">Gulfstream G650</h3>
+<div class="grid grid-cols-2 gap-4 mb-8">
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Passengers</p>
+<p class="text-white font-semibold">13-16 PAX</p>
+</div>
+<div>
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Max Range</p>
+<p class="text-white font-semibold">7,000 NM</p>
+</div>
+</div>
+<div class="flex gap-4">
+<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">View Aircraft</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">Request Quote</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Footer -->
+<footer class="bg-surface-container-lowest border-t border-outline-variant/10 py-20 px-margin-mobile md:px-margin-desktop">
+<div class="max-w-container-max mx-auto flex flex-col md:flex-row justify-between items-start gap-12">
+<div class="max-w-xs">
+<div class="font-headline-md text-headline-md text-white mb-6 uppercase tracking-widest">THE CHARTER GUY</div>
+<p class="text-on-tertiary-container text-sm leading-relaxed mb-8">
+            The Charter Guy is an air charter broker. We are not a direct air carrier and do not own or operate any aircraft.
+        </p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-12">
+<div>
+<h5 class="text-white font-semibold mb-6">Quick Links</h5>
+<ul class="space-y-4 text-sm text-on-tertiary-container">
+<li><a class="hover:text-secondary transition-colors" href="code.html#charters">Charters</a></li>
+<li><a class="hover:text-secondary transition-colors" href="code.html#sales">Sales</a></li>
+<li><a class="hover:text-secondary transition-colors" href="fleet.html">Fleet</a></li>
+<li><a class="hover:text-secondary transition-colors" href="code.html#why-us">Why Us</a></li>
+</ul>
+</div>
+<div>
+<h5 class="text-white font-semibold mb-6">Legal</h5>
+<ul class="space-y-4 text-sm text-on-tertiary-container">
+<li><a class="hover:text-secondary transition-colors" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-secondary transition-colors" href="#">Terms of Service</a></li>
+<li><a class="hover:text-secondary transition-colors" href="#">Cookie Policy</a></li>
+</ul>
+</div>
+<div class="col-span-2 md:col-span-1">
+<h5 class="text-white font-semibold mb-6">Follow Us</h5>
+<div class="flex gap-4">
+<a class="w-10 h-10 border border-outline-variant/30 flex items-center justify-center hover:border-secondary hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-sm">link</span>
+</a>
+<a class="w-10 h-10 border border-outline-variant/30 flex items-center justify-center hover:border-secondary hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-sm">share</span>
+</a>
+<a class="w-10 h-10 border border-outline-variant/30 flex items-center justify-center hover:border-secondary hover:text-secondary transition-all" href="#">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+<div class="max-w-container-max mx-auto mt-20 pt-8 border-t border-outline-variant/5 text-center md:text-left">
+<p class="text-[10px] text-on-tertiary-container uppercase tracking-[0.2em]">
+            © 2024 THE CHARTER GUY. ALL RIGHTS RESERVED.
+        </p>
+</div>
+</footer>
+<!-- Aircraft View Modal -->
+<div class="fixed inset-0 z-[99] bg-black/80 backdrop-blur-sm hidden items-center justify-center p-4" id="aircraft-modal">
+    <button class="absolute top-6 right-6 text-white hover:text-secondary transition-colors z-10" id="close-modal-btn">
+        <span class="material-symbols-outlined text-4xl">close</span>
+    </button>
+    <div class="w-full max-w-4xl bg-surface-container-low border border-outline-variant/20 rounded-xl overflow-hidden shadow-2xl" id="modal-content">
+    </div>
+</div>
+<script>
+        // Mobile menu logic
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeBtn = document.getElementById('close-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        const links = menu.querySelectorAll('a');
+
+        menuBtn.addEventListener('click', () => {
+            menu.classList.remove('translate-x-full');
+        });
+
+        closeBtn.addEventListener('click', () => {
+            menu.classList.add('translate-x-full');
+        });
+
+        links.forEach(link => {
+            link.addEventListener('click', () => {
+                menu.classList.add('translate-x-full');
+            });
+        });
+
+        // Header transparency on scroll
+        const nav = document.querySelector('nav');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                nav.classList.add('bg-background/95');
+                nav.classList.remove('bg-background/80');
+            } else {
+                nav.classList.add('bg-background/80');
+                nav.classList.remove('bg-background/95');
+            }
+        });
+
+        // Fleet filters
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const fleetCards = document.querySelectorAll('.fleet-card');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active button styling
+                filterBtns.forEach(b => {
+                    b.classList.remove('border-secondary', 'text-secondary', 'border-2');
+                    b.classList.add('border', 'border-outline-variant/30', 'text-on-surface-variant');
+                    const dot = b.querySelector('div');
+                    if (dot) dot.remove();
+                });
+                btn.classList.add('border-secondary', 'text-secondary', 'border-2');
+                btn.classList.remove('border-outline-variant/30', 'text-on-surface-variant');
+                if (btn.dataset.filter === 'all') {
+                    btn.innerHTML = '<div class="w-1.5 h-1.5 rounded-full bg-secondary"></div> All Fleet';
+                }
+
+                // Filter cards
+                const filter = btn.dataset.filter;
+                fleetCards.forEach(card => {
+                    if (filter === 'all' || card.dataset.category === filter) {
+                        card.style.display = 'block';
+                        card.style.animation = 'fadeIn 0.5s ease-in';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Add fadeIn keyframes
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Aircraft modal logic
+        const aircraftModal = document.getElementById('aircraft-modal');
+        const modalContent = document.getElementById('modal-content');
+        const closeModalBtn = document.getElementById('close-modal-btn');
+        const viewAircraftBtns = document.querySelectorAll('.view-aircraft-btn');
+
+        function openModal(aircraftData) {
+            modalContent.innerHTML = `
+                <div class="aspect-video w-full bg-cover bg-center" style="background-image: url('${aircraftData.image}')"></div>
+                <div class="p-8 md:p-12">
+                    <h3 class="font-headline-lg text-headline-lg text-white mb-8">${aircraftData.name}</h3>
+                    <div class="grid grid-cols-2 gap-6 mb-10">
+                        <div>
+                            <p class="text-[10px] text-tertiary uppercase tracking-widest mb-2">Passengers</p>
+                            <p class="text-white font-semibold text-xl">${aircraftData.passengers}</p>
+                        </div>
+                        <div>
+                            <p class="text-[10px] text-tertiary uppercase tracking-widest mb-2">Max Range</p>
+                            <p class="text-white font-semibold text-xl">${aircraftData.range}</p>
+                        </div>
+                    </div>
+                    <button class="w-full bg-secondary text-on-secondary py-4 font-label-sm text-label-sm gold-glow hover:opacity-90 transition-all">
+                        Request a Quote
+                    </button>
+                </div>
+            `;
+            aircraftModal.style.display = 'flex';
+            aircraftModal.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            aircraftModal.style.display = 'none';
+            aircraftModal.classList.add('hidden');
+            aircraftModal.classList.remove('flex');
+            document.body.style.overflow = '';
+        }
+
+        viewAircraftBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const card = e.target.closest('[data-aircraft-name]');
+                const aircraftData = {
+                    name: card.dataset.aircraftName,
+                    passengers: card.dataset.aircraftPassengers,
+                    range: card.dataset.aircraftRange,
+                    image: card.dataset.aircraftImage
+                };
+                openModal(aircraftData);
+            });
+        });
+
+        closeModalBtn.addEventListener('click', closeModal);
+        aircraftModal.addEventListener('click', (e) => {
+            if (e.target === aircraftModal) {
+                closeModal();
+            }
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && !aircraftModal.classList.contains('hidden')) {
+                closeModal();
+            }
+        });
+    </script>
+</body></html>
