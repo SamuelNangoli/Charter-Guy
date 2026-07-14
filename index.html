@@ -105,7 +105,7 @@
             display: inline-block;
             vertical-align: middle;
         }
-        
+
         .skeleton {
             background: linear-gradient(90deg, #1A1A1A 25%, #242424 50%, #1A1A1A 75%);
             background-size: 200% 100%;
@@ -133,21 +133,149 @@
             box-shadow: none;
         }
 
-        .glass-card {
-            background: rgba(26, 26, 26, 0.6);
-            -webkit-backdrop-filter: blur(10px);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(229, 231, 235, 0.05);
-        }
-
         html {
             scroll-behavior: smooth;
+        }
+
+        /* ================= 3D Glassmorphism Layer ================= */
+
+        body {
+            background:
+                radial-gradient(circle at 12% 8%, rgba(192, 198, 219, 0.07), transparent 40%),
+                radial-gradient(circle at 88% 4%, rgba(233, 193, 118, 0.06), transparent 38%),
+                radial-gradient(circle at 50% 60%, rgba(192, 198, 219, 0.05), transparent 45%),
+                radial-gradient(circle at 90% 90%, rgba(233, 193, 118, 0.05), transparent 40%),
+                #131313;
+            background-attachment: fixed;
+        }
+
+        /* Ambient floating orbs used as atmospheric depth behind glass panels */
+        .orb {
+            position: absolute;
+            border-radius: 9999px;
+            filter: blur(70px);
+            pointer-events: none;
+            z-index: 0;
+            animation: orb-float 14s ease-in-out infinite;
+        }
+        .orb-gold { background: radial-gradient(circle, rgba(233, 193, 118, 0.35), transparent 70%); }
+        .orb-platinum { background: radial-gradient(circle, rgba(192, 198, 219, 0.28), transparent 70%); }
+
+        @keyframes orb-float {
+            0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(20px, -30px, 0) scale(1.08); }
+        }
+
+        /* Base glass surface: layered translucency + inset highlight + soft elevation shadow */
+        .glass-card, .glass-panel {
+            position: relative;
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.015) 45%, rgba(0, 0, 0, 0.12) 100%),
+                rgba(26, 26, 26, 0.55);
+            -webkit-backdrop-filter: blur(20px) saturate(150%);
+            backdrop-filter: blur(20px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-top-color: rgba(255, 255, 255, 0.16);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.06),
+                0 10px 20px -12px rgba(0, 0, 0, 0.55),
+                0 30px 50px -24px rgba(0, 0, 0, 0.65);
+            transition: transform 0.5s cubic-bezier(.2,.8,.2,1), box-shadow 0.5s ease, border-color 0.5s ease;
+            transform: translateZ(0);
+        }
+
+        .glass-card:hover, .glass-panel:hover {
+            border-color: rgba(233, 193, 118, 0.35);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.08),
+                0 20px 30px -14px rgba(0, 0, 0, 0.6),
+                0 0 45px -10px rgba(233, 193, 118, 0.18);
+        }
+
+        /* Cards that lift + tilt in 3D on hover (JS supplies the tilt rotation) */
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+        .tilt-card:hover {
+            transform: translateY(-8px) translateZ(0);
+        }
+
+        /* Floating glass icon badges */
+        .glass-icon {
+            background:
+                linear-gradient(155deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.02)),
+                rgba(233, 193, 118, 0.06);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                0 12px 24px -10px rgba(0, 0, 0, 0.6);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+        .group:hover .glass-icon {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow:
+                inset 0 1px 0 rgba(255, 255, 255, 0.14),
+                0 16px 28px -10px rgba(0, 0, 0, 0.65),
+                0 0 30px -8px rgba(233, 193, 118, 0.3);
+        }
+
+        /* Floating stat/info chips that hover above imagery */
+        .float-chip {
+            animation: chip-bob 6s ease-in-out infinite;
+        }
+        @keyframes chip-bob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 3D depth buttons */
+        .btn-3d {
+            position: relative;
+            box-shadow: 0 10px 20px -8px rgba(233, 193, 118, 0.35), inset 0 1px 0 rgba(255,255,255,0.25);
+            transition: transform 0.25s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease;
+        }
+        .btn-3d:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 28px -8px rgba(233, 193, 118, 0.45), inset 0 1px 0 rgba(255,255,255,0.3);
+        }
+        .btn-3d:active {
+            transform: translateY(0);
+            box-shadow: 0 4px 10px -6px rgba(233, 193, 118, 0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+        }
+
+        .btn-ghost-3d {
+            transition: transform 0.25s cubic-bezier(.2,.8,.2,1), box-shadow 0.25s ease, border-color 0.25s ease;
+        }
+        .btn-ghost-3d:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 16px 28px -12px rgba(0, 0, 0, 0.5);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Perspective context for sections containing tilt cards */
+        .perspective-container {
+            perspective: 1600px;
+        }
+
+        /* Glass pill filter chips / nav */
+        .glass-pill {
+            background: rgba(255, 255, 255, 0.04);
+            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+        .glass-pill:hover {
+            background: rgba(255, 255, 255, 0.07);
         }
     </style>
 </head>
 <body class="bg-background text-on-surface font-body-md overflow-x-hidden">
 <!-- TopNavBar -->
-<nav class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md border-b border-outline-variant/10">
+<nav class="fixed top-0 w-full z-50 bg-background/70 backdrop-blur-xl border-b border-white/5 rounded-b-2xl shadow-[0_20px_40px_-20px_rgba(0,0,0,0.6)]">
 <div class="flex justify-between items-center px-margin-mobile md:px-margin-desktop py-unit max-w-container-max mx-auto h-20">
 <div class="font-display-lg-mobile text-[24px] md:text-display-lg-mobile uppercase tracking-widest text-secondary font-headline-lg">
                 THE CHARTER GUY
@@ -158,7 +286,7 @@
 <a class="text-on-surface-variant hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#sales">Sales</a>
 <a class="text-on-surface-variant hover:text-on-surface transition-colors font-label-sm text-label-sm" href="fleet.html">Fleet</a>
 <a class="text-on-surface-variant hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#why-us">Why Us</a>
-<a class="bg-secondary text-on-secondary px-6 py-3 font-label-sm text-label-sm hover:opacity-90 active:scale-95 transition-all duration-200" href="#contact">
+<a class="bg-secondary text-on-secondary px-6 py-3 font-label-sm text-label-sm rounded-lg btn-3d" href="#contact">
                     Request Quote
                 </a>
 </div>
@@ -169,7 +297,7 @@
 </div>
 </nav>
 <!-- Mobile Menu Overlay -->
-<div class="fixed inset-0 bg-background z-[60] flex flex-col items-center justify-center gap-8 transition-transform duration-500 translate-x-full md:hidden" id="mobile-menu">
+<div class="fixed inset-0 bg-background/90 backdrop-blur-2xl z-[60] flex flex-col items-center justify-center gap-8 transition-transform duration-500 translate-x-full md:hidden" id="mobile-menu">
 <button class="absolute top-8 right-8 text-on-surface" id="close-menu-btn">
 <span class="material-symbols-outlined">close</span>
 </button>
@@ -177,7 +305,7 @@
 <a class="font-display-lg-mobile text-on-surface" href="#sales">Sales</a>
 <a class="font-display-lg-mobile text-on-surface" href="fleet.html">Fleet</a>
 <a class="font-display-lg-mobile text-on-surface" href="#why-us">Why Us</a>
-<a class="bg-secondary text-on-secondary px-10 py-4 font-label-sm text-label-sm mt-4" href="#contact">Request Quote</a>
+<a class="bg-secondary text-on-secondary px-10 py-4 font-label-sm text-label-sm rounded-lg btn-3d mt-4" href="#contact">Request Quote</a>
 </div>
 <!-- Hero Section -->
 <section class="relative h-screen flex items-center justify-center overflow-hidden">
@@ -188,7 +316,24 @@
 ></div>
 <div class="absolute inset-0 bg-black/60"></div>
 </div>
+<!-- Ambient depth orbs -->
+<div class="orb orb-gold w-96 h-96 top-1/4 -left-32" style="animation-delay: -3s;"></div>
+<div class="orb orb-platinum w-80 h-80 bottom-10 -right-24" style="animation-delay: -8s;"></div>
+<!-- Floating glass stat chips -->
+<div class="hidden lg:block absolute top-[22%] right-[10%] z-10 float-chip">
+<div class="glass-panel rounded-xl px-6 py-4 text-left">
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Global Network</p>
+<p class="text-white font-semibold text-xl">20,000+ Aircraft</p>
+</div>
+</div>
+<div class="hidden lg:block absolute bottom-[24%] left-[8%] z-10 float-chip" style="animation-delay: -3s;">
+<div class="glass-panel rounded-xl px-6 py-4 text-left">
+<p class="text-[10px] text-tertiary uppercase tracking-widest mb-1">Concierge</p>
+<p class="text-white font-semibold text-xl">24/7 Service</p>
+</div>
+</div>
 <div class="relative z-10 text-center px-margin-mobile max-w-4xl mx-auto">
+<div class="glass-panel rounded-2xl px-8 py-12 md:px-16 md:py-16">
 <h1 class="font-display-lg-mobile md:font-display-lg text-display-lg-mobile md:text-display-lg text-white mb-6">
                 Welcome to The Charter Guy
             </h1>
@@ -196,12 +341,13 @@
                 Your premier aviation brokerage. We offer bespoke on-demand private jet charters and expert aircraft sales/acquisitions. Whether booking a luxury getaway or buying your next aircraft, we provide global access, rigorous safety vetting, and 24/7 white-glove service tailored to your exact needs.
             </p>
 <div class="flex flex-col md:flex-row gap-4 justify-center items-center">
-<a class="w-full md:w-auto bg-secondary text-on-secondary px-10 py-5 font-label-sm text-label-sm gold-glow transition-all" href="#contact">
+<a class="w-full md:w-auto bg-secondary text-on-secondary px-10 py-5 font-label-sm text-label-sm btn-3d rounded-lg" href="#contact">
                     Request a Quote
                 </a>
-<a class="w-full md:w-auto border border-outline-variant/30 text-white px-10 py-5 font-label-sm text-label-sm hover:bg-white/5 transition-all" href="#sales">
+<a class="w-full md:w-auto border border-outline-variant/30 text-white px-10 py-5 font-label-sm text-label-sm btn-ghost-3d glass-pill rounded-lg" href="#sales">
                     Discuss an Acquisition
                 </a>
+</div>
 </div>
 </div>
 <div class="absolute bottom-10 left-1/2 -translate-x-1/2 animate-bounce opacity-50">
@@ -219,10 +365,12 @@
                 Need to fly on your schedule? We connect you to a global network of thousands of aircraft. Avoid long airport lines and fly point-to-point in total privacy and comfort.
             </p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter perspective-container">
 <!-- Card 1 -->
-<div class="group glass-card p-10 hover:border-secondary/40 transition-all duration-500">
-<span class="material-symbols-outlined text-secondary text-4xl mb-8">flight_takeoff</span>
+<div class="group glass-card tilt-card rounded-2xl p-10">
+<div class="glass-icon w-16 h-16 rounded-xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-secondary text-4xl">flight_takeoff</span>
+</div>
 <h3 class="font-headline-md text-headline-md mb-4">On-Demand Charter</h3>
 <p class="text-on-surface-variant font-body-md mb-8">Book trips as needed with no upfront capital or long-term commitments. Air Charter Service Private Jet Charter.</p>
 <div class="w-full h-px bg-outline-variant/20 mb-8"></div>
@@ -232,8 +380,10 @@
 </ul>
 </div>
 <!-- Card 2 -->
-<div class="group glass-card p-10 border-secondary/20 transition-all duration-500">
-<span class="material-symbols-outlined text-secondary text-4xl mb-8">business_center</span>
+<div class="group glass-card tilt-card rounded-2xl p-10 border-secondary/20">
+<div class="glass-icon w-16 h-16 rounded-xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-secondary text-4xl">business_center</span>
+</div>
 <h3 class="font-headline-md text-headline-md mb-4">Corporate & Leisure</h3>
 <p class="text-on-surface-variant font-body-md mb-8">Customized itineraries for business meetings, executive travel, or luxury vacations.</p>
 <div class="w-full h-px bg-outline-variant/20 mb-8"></div>
@@ -243,8 +393,10 @@
 </ul>
 </div>
 <!-- Card 3 -->
-<div class="group glass-card p-10 hover:border-secondary/40 transition-all duration-500">
-<span class="material-symbols-outlined text-secondary text-4xl mb-8">share_location</span>
+<div class="group glass-card tilt-card rounded-2xl p-10">
+<div class="glass-icon w-16 h-16 rounded-xl flex items-center justify-center mb-8">
+<span class="material-symbols-outlined text-secondary text-4xl">share_location</span>
+</div>
 <h3 class="font-headline-md text-headline-md mb-4">Empty Legs</h3>
 <p class="text-on-surface-variant font-body-md mb-8">Access empty-leg flights and enjoy significant savings on premium private jet travel.</p>
 <div class="w-full h-px bg-outline-variant/20 mb-8"></div>
@@ -256,30 +408,34 @@
 </div>
 </section>
 <!-- Sales & Acquisitions Section -->
-<section class="bg-surface-container-lowest py-section-gap" id="sales">
-<div class="px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
+<section class="relative bg-surface-container-lowest py-section-gap overflow-hidden" id="sales">
+<div class="orb orb-platinum w-[500px] h-[500px] -top-40 left-1/3" style="animation-delay: -5s;"></div>
+<div class="orb orb-gold w-72 h-72 bottom-0 -left-20" style="animation-delay: -10s;"></div>
+<div class="relative z-10 px-margin-mobile md:px-margin-desktop max-w-container-max mx-auto">
 <div class="text-center mb-20">
 <span class="text-secondary font-label-sm text-label-sm uppercase tracking-widest block mb-4">Portfolio Management</span>
 <h2 class="font-headline-lg text-headline-lg text-white">Aircraft Sales & Acquisitions</h2>
 <p class="text-on-surface-variant max-w-2xl mx-auto mt-4">Looking to buy or sell an aircraft? The Charter Guy provides end-to-end management of complex aviation transactions.</p>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-3 gap-16 md:gap-8">
-<div class="text-center px-4">
-<div class="w-20 h-20 bg-secondary/5 rounded-full flex items-center justify-center mx-auto mb-8">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 perspective-container">
+<div class="group glass-panel tilt-card rounded-2xl text-center px-8 py-12">
+<div class="glass-icon w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8">
 <span class="material-symbols-outlined text-secondary text-3xl">precision_manufacturing</span>
 </div>
 <h3 class="font-headline-md text-headline-md mb-6">Aircraft Acquisitions</h3>
 <p class="text-on-surface-variant font-body-md">Leverage our market expertise to source the perfect aircraft, negotiate competitive prices, and handle pre-buy inspections.</p>
 </div>
-<div class="text-center px-4 border-y md:border-y-0 md:border-x border-outline-variant/10 py-12 md:py-0">
-<div class="w-20 h-20 bg-secondary/5 rounded-full flex items-center justify-center mx-auto mb-8">
+<div class="md:-translate-y-6">
+<div class="group glass-panel tilt-card rounded-2xl text-center px-8 py-12 h-full">
+<div class="glass-icon w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8">
 <span class="material-symbols-outlined text-secondary text-3xl">handshake</span>
 </div>
 <h3 class="font-headline-md text-headline-md mb-6">Brokerage & Sales</h3>
 <p class="text-on-surface-variant font-body-md">We market your aircraft to a highly targeted, global network of buyers to ensure a fast, transparent, and profitable transaction.</p>
 </div>
-<div class="text-center px-4">
-<div class="w-20 h-20 bg-secondary/5 rounded-full flex items-center justify-center mx-auto mb-8">
+</div>
+<div class="group glass-panel tilt-card rounded-2xl text-center px-8 py-12">
+<div class="glass-icon w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-8">
 <span class="material-symbols-outlined text-secondary text-3xl">query_stats</span>
 </div>
 <h3 class="font-headline-md text-headline-md mb-6">Valuations</h3>
@@ -296,18 +452,18 @@
 <p class="text-secondary font-label-sm text-label-sm uppercase tracking-widest">Access to over 20,000 aircraft worldwide</p>
 </div>
 <div class="flex flex-wrap justify-center gap-2">
-<button class="px-4 py-2 border-2 border-secondary text-secondary font-label-sm text-label-sm flex items-center gap-2">
+<button class="glass-pill rounded-full px-4 py-2 border-2 border-secondary text-secondary font-label-sm text-label-sm flex items-center gap-2">
 <div class="w-1.5 h-1.5 rounded-full bg-secondary"></div> ALL FLEET
                 </button>
-<button class="px-4 py-2 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary transition-colors">TURBO PROP</button>
-<button class="px-4 py-2 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary transition-colors">LIGHT JET</button>
-<button class="px-4 py-2 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary transition-colors">MID-SIZE</button>
-<button class="px-4 py-2 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary transition-colors">HEAVY JET</button>
+<button class="glass-pill rounded-full px-4 py-2 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary transition-colors">TURBO PROP</button>
+<button class="glass-pill rounded-full px-4 py-2 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary transition-colors">LIGHT JET</button>
+<button class="glass-pill rounded-full px-4 py-2 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary transition-colors">MID-SIZE</button>
+<button class="glass-pill rounded-full px-4 py-2 border border-outline-variant/30 text-on-surface-variant font-label-sm text-label-sm hover:border-secondary transition-colors">HEAVY JET</button>
 </div>
 </div>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-gutter perspective-container">
 <!-- Fleet Card 1 -->
-<div class="group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-aircraft-name="Pilatus PC-12" data-aircraft-passengers="6-8 PAX" data-aircraft-range="1,803 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuAGe8IE3NUBX_uTI8YmJ14DIRlRv8OB_cJ4Z6QAGJoZ8b_TDkdpe7jVUgT1wRmF6q3ohIadXVL7gxbIg4ozDRXFc9f_Aj0sWiFLYSRISsPnhEhiOK-Pswq7mc184qC96FnD2A-p37Wb2euDFNQbwD9Q_-Jiv-uLA3zFBZnbQre12BkkUdCTtDdS7SkL6_4rssQazFxtPA0MTZfpFFVgD53dZxvh82Vaig7sXWj2h65_iBHgXp_RtTQu4g">
+<div class="group glass-card tilt-card rounded-2xl overflow-hidden" data-aircraft-name="Pilatus PC-12" data-aircraft-passengers="6-8 PAX" data-aircraft-range="1,803 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuAGe8IE3NUBX_uTI8YmJ14DIRlRv8OB_cJ4Z6QAGJoZ8b_TDkdpe7jVUgT1wRmF6q3ohIadXVL7gxbIg4ozDRXFc9f_Aj0sWiFLYSRISsPnhEhiOK-Pswq7mc184qC96FnD2A-p37Wb2euDFNQbwD9Q_-Jiv-uLA3zFBZnbQre12BkkUdCTtDdS7SkL6_4rssQazFxtPA0MTZfpFFVgD53dZxvh82Vaig7sXWj2h65_iBHgXp_RtTQu4g">
 <div class="aspect-[16/10] overflow-hidden relative">
 <div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A professional studio photograph of a Pilatus PC-12 NGX on a clean hangar floor. The aircraft is painted in a metallic charcoal and gold accent livery. The lighting is crisp, emphasizing the single-engine turboprop's rugged yet refined engineering. The atmosphere is professional, sleek, and high-end, fitting for a premium aviation brokerage website." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAGe8IE3NUBX_uTI8YmJ14DIRlRv8OB_cJ4Z6QAGJoZ8b_TDkdpe7jVUgT1wRmF6q3ohIadXVL7gxbIg4ozDRXFc9f_Aj0sWiFLYSRISsPnhEhiOK-Pswq7mc184qC96FnD2A-p37Wb2euDFNQbwD9Q_-Jiv-uLA3zFBZnbQre12BkkUdCTtDdS7SkL6_4rssQazFxtPA0MTZfpFFVgD53dZxvh82Vaig7sXWj2h65_iBHgXp_RtTQu4g')"></div>
 </div>
@@ -324,13 +480,13 @@
 </div>
 </div>
 <div class="flex gap-4">
-<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">VIEW AIRCRAFT</button>
-<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">REQUEST QUOTE</button>
+<button class="flex-1 text-label-sm font-label-sm glass-pill rounded-lg border border-outline-variant text-on-surface py-3 btn-ghost-3d view-aircraft-btn">VIEW AIRCRAFT</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 rounded-lg btn-3d">REQUEST QUOTE</button>
 </div>
 </div>
 </div>
 <!-- Fleet Card 2 -->
-<div class="group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-aircraft-name="Phenom 300E" data-aircraft-passengers="7-9 PAX" data-aircraft-range="2,010 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuBSTZzhnBfHVrZibvM-vFlo8yqfp506jtawvA45A32xRG2IigR-wLzHGGlOQYxzk6h8yFWj_Z__0uk4QW8EbdDBbSAH1k3AIQVG1LZkMiv5DFjKijb5lcquq_HA3R2zFasYOG5qWzN8ERAn9q_Cztzo1nQ6lorwB7SkESw7YJ3spcd9M-vSeEENmVceHW9vUC1XOdNQsMqomjZw0-zwR6qOaK7VB5lE4jXKgfbbJ01xEI_lY81hNnP-dQ">
+<div class="group glass-card tilt-card rounded-2xl overflow-hidden" data-aircraft-name="Phenom 300E" data-aircraft-passengers="7-9 PAX" data-aircraft-range="2,010 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuBSTZzhnBfHVrZibvM-vFlo8yqfp506jtawvA45A32xRG2IigR-wLzHGGlOQYxzk6h8yFWj_Z__0uk4QW8EbdDBbSAH1k3AIQVG1LZkMiv5DFjKijb5lcquq_HA3R2zFasYOG5qWzN8ERAn9q_Cztzo1nQ6lorwB7SkESw7YJ3spcd9M-vSeEENmVceHW9vUC1XOdNQsMqomjZw0-zwR6qOaK7VB5lE4jXKgfbbJ01xEI_lY81hNnP-dQ">
 <div class="aspect-[16/10] overflow-hidden">
 <div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="An exterior view of an Embraer Phenom 300E in flight against a sunset sky. The golden hour light glints off the fuselage and winglets. The scene conveys speed, agility, and modern luxury. The color palette is warm with oranges and deep blues, contrasting the aircraft's polished silver exterior." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBSTZzhnBfHVrZibvM-vFlo8yqfp506jtawvA45A32xRG2IigR-wLzHGGlOQYxzk6h8yFWj_Z__0uk4QW8EbdDBbSAH1k3AIQVG1LZkMiv5DFjKijb5lcquq_HA3R2zFasYOG5qWzN8ERAn9q_Cztzo1nQ6lorwB7SkESw7YJ3spcd9M-vSeEENmVceHW9vUC1XOdNQsMqomjZw0-zwR6qOaK7VB5lE4jXKgfbbJ01xEI_lY81hNnP-dQ')"></div>
 </div>
@@ -347,13 +503,13 @@
 </div>
 </div>
 <div class="flex gap-4">
-<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">VIEW AIRCRAFT</button>
-<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">REQUEST QUOTE</button>
+<button class="flex-1 text-label-sm font-label-sm glass-pill rounded-lg border border-outline-variant text-on-surface py-3 btn-ghost-3d view-aircraft-btn">VIEW AIRCRAFT</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 rounded-lg btn-3d">REQUEST QUOTE</button>
 </div>
 </div>
 </div>
 <!-- Fleet Card 3 -->
-<div class="group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-aircraft-name="Citation Latitude" data-aircraft-passengers="9 PAX" data-aircraft-range="2,700 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuAbQVe5RtCXFYYtmBtOWW17nynDcxzmpe9eKPnB2jc9-d44gPSY1_8SJ-jth45Tm-r07IAa-AWGtqYE49XlLU4aQKq4EjY8u8T1hT1FKCyMCpRXvmjxHG4VcURxHAYJScmF4_a9PjGMB3fv-ARnmlLMy-0pqADgJk9JziFUFgZ6j0g4warD-f14jzt2lFVw394jlb7bKVMgCijgDwzXShUyOwS_0wN9FJu7Pzc83Qm2zBP7RUYi3I5NNw">
+<div class="group glass-card tilt-card rounded-2xl overflow-hidden" data-aircraft-name="Citation Latitude" data-aircraft-passengers="9 PAX" data-aircraft-range="2,700 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuAbQVe5RtCXFYYtmBtOWW17nynDcxzmpe9eKPnB2jc9-d44gPSY1_8SJ-jth45Tm-r07IAa-AWGtqYE49XlLU4aQKq4EjY8u8T1hT1FKCyMCpRXvmjxHG4VcURxHAYJScmF4_a9PjGMB3fv-ARnmlLMy-0pqADgJk9JziFUFgZ6j0g4warD-f14jzt2lFVw394jlb7bKVMgCijgDwzXShUyOwS_0wN9FJu7Pzc83Qm2zBP7RUYi3I5NNw">
 <div class="aspect-[16/10] overflow-hidden">
 <div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A side profile of a Cessna Citation Latitude parked on a wet tarmac after a rain, creating beautiful reflections on the ground. Soft evening light highlights the wide cabin fuselage. The mood is tranquil and sophisticated, emphasizing the aircraft's comfort and standing height cabin." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAbQVe5RtCXFYYtmBtOWW17nynDcxzmpe9eKPnB2jc9-d44gPSY1_8SJ-jth45Tm-r07IAa-AWGtqYE49XlLU4aQKq4EjY8u8T1hT1FKCyMCpRXvmjxHG4VcURxHAYJScmF4_a9PjGMB3fv-ARnmlLMy-0pqADgJk9JziFUFgZ6j0g4warD-f14jzt2lFVw394jlb7bKVMgCijgDwzXShUyOwS_0wN9FJu7Pzc83Qm2zBP7RUYi3I5NNw')"></div>
 </div>
@@ -370,13 +526,13 @@
 </div>
 </div>
 <div class="flex gap-4">
-<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">VIEW AIRCRAFT</button>
-<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">REQUEST QUOTE</button>
+<button class="flex-1 text-label-sm font-label-sm glass-pill rounded-lg border border-outline-variant text-on-surface py-3 btn-ghost-3d view-aircraft-btn">VIEW AIRCRAFT</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 rounded-lg btn-3d">REQUEST QUOTE</button>
 </div>
 </div>
 </div>
 <!-- Fleet Card 4 -->
-<div class="group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-aircraft-name="Challenger 350" data-aircraft-passengers="10 PAX" data-aircraft-range="3,200 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuChRz9PRe9xdH9vd-PjJOtUzVpju1HME5BYUxw5_EnRUKpa_B6U2W4pfGNgUbAi5oWzfQUoZQ5g0oN8JnskXfElIOxyBAWi7Bx7LpQYL4rztyUReRfE0uusbiZww37iPSMikuXKmRi_uqkFoGcigwDSzkT5wtAT2KzLnCsyNP_vQxGoo0prmSQqvA5fj5uOSKft1wrP7xBh-JDKWJL-Z8nUS5H9DFlNoXhektRgrwJT9zO8ZjbM_VcZCA">
+<div class="group glass-card tilt-card rounded-2xl overflow-hidden" data-aircraft-name="Challenger 350" data-aircraft-passengers="10 PAX" data-aircraft-range="3,200 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuChRz9PRe9xdH9vd-PjJOtUzVpju1HME5BYUxw5_EnRUKpa_B6U2W4pfGNgUbAi5oWzfQUoZQ5g0oN8JnskXfElIOxyBAWi7Bx7LpQYL4rztyUReRfE0uusbiZww37iPSMikuXKmRi_uqkFoGcigwDSzkT5wtAT2KzLnCsyNP_vQxGoo0prmSQqvA5fj5uOSKft1wrP7xBh-JDKWJL-Z8nUS5H9DFlNoXhektRgrwJT9zO8ZjbM_VcZCA">
 <div class="aspect-[16/10] overflow-hidden">
 <div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="The elegant tail and engines of a Bombardier Challenger 350, showing the high-quality finish and precision assembly. The focus is on the engine nacelle and the 'Challenger' branding. The light is soft and diffused, creating a premium matte-metallic feel." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuChRz9PRe9xdH9vd-PjJOtUzVpju1HME5BYUxw5_EnRUKpa_B6U2W4pfGNgUbAi5oWzfQUoZQ5g0oN8JnskXfElIOxyBAWi7Bx7LpQYL4rztyUReRfE0uusbiZww37iPSMikuXKmRi_uqkFoGcigwDSzkT5wtAT2KzLnCsyNP_vQxGoo0prmSQqvA5fj5uOSKft1wrP7xBh-JDKWJL-Z8nUS5H9DFlNoXhektRgrwJT9zO8ZjbM_VcZCA')"></div>
 </div>
@@ -393,13 +549,13 @@
 </div>
 </div>
 <div class="flex gap-4">
-<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">VIEW AIRCRAFT</button>
-<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">REQUEST QUOTE</button>
+<button class="flex-1 text-label-sm font-label-sm glass-pill rounded-lg border border-outline-variant text-on-surface py-3 btn-ghost-3d view-aircraft-btn">VIEW AIRCRAFT</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 rounded-lg btn-3d">REQUEST QUOTE</button>
 </div>
 </div>
 </div>
 <!-- Fleet Card 5 -->
-<div class="group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-aircraft-name="Global 7500" data-aircraft-passengers="19 PAX" data-aircraft-range="7,700 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuDiAsxiLiChOYgvKZ4-USPW-Y_U7q1wWcOVIcM4bsn3veBiWg02rioP5_udQxIY3ax6EbyrjoAbj-74VDYxVQRiV13BBWnLaJ0zXciVq7SVrEyo3wpfTe9JUETufQITOTaLGGRvnVXO1TUI-jrvPrXqcsBBVTN_SZNj6U7qfVhfnqgNzhzyh8Qu9kft7qorVrauZOk9cZsSgYGYCIQoUsxLB1EtoBK_JX5Pe7Yy5RByVXXEFAlBX_2kNg">
+<div class="group glass-card tilt-card rounded-2xl overflow-hidden" data-aircraft-name="Global 7500" data-aircraft-passengers="19 PAX" data-aircraft-range="7,700 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuDiAsxiLiChOYgvKZ4-USPW-Y_U7q1wWcOVIcM4bsn3veBiWg02rioP5_udQxIY3ax6EbyrjoAbj-74VDYxVQRiV13BBWnLaJ0zXciVq7SVrEyo3wpfTe9JUETufQITOTaLGGRvnVXO1TUI-jrvPrXqcsBBVTN_SZNj6U7qfVhfnqgNzhzyh8Qu9kft7qorVrauZOk9cZsSgYGYCIQoUsxLB1EtoBK_JX5Pe7Yy5RByVXXEFAlBX_2kNg">
 <div class="aspect-[16/10] overflow-hidden">
 <div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A wide angle shot of a Global 7500 on a mountain-surrounded runway in Switzerland. The aircraft's massive wingspan and long cabin are prominent. The lighting is bright and clear alpine light, showcasing the ultra-long-range jet's dominance and luxury." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDiAsxiLiChOYgvKZ4-USPW-Y_U7q1wWcOVIcM4bsn3veBiWg02rioP5_udQxIY3ax6EbyrjoAbj-74VDYxVQRiV13BBWnLaJ0zXciVq7SVrEyo3wpfTe9JUETufQITOTaLGGRvnVXO1TUI-jrvPrXqcsBBVTN_SZNj6U7qfVhfnqgNzhzyh8Qu9kft7qorVrauZOk9cZsSgYGYCIQoUsxLB1EtoBK_JX5Pe7Yy5RByVXXEFAlBX_2kNg')"></div>
 </div>
@@ -416,13 +572,13 @@
 </div>
 </div>
 <div class="flex gap-4">
-<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">VIEW AIRCRAFT</button>
-<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">REQUEST QUOTE</button>
+<button class="flex-1 text-label-sm font-label-sm glass-pill rounded-lg border border-outline-variant text-on-surface py-3 btn-ghost-3d view-aircraft-btn">VIEW AIRCRAFT</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 rounded-lg btn-3d">REQUEST QUOTE</button>
 </div>
 </div>
 </div>
 <!-- Fleet Card 6 -->
-<div class="group bg-surface-container-low border border-outline-variant/10 overflow-hidden hover:border-secondary/30 transition-all" data-aircraft-name="Gulfstream G650" data-aircraft-passengers="13-16 PAX" data-aircraft-range="7,000 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuC-UpxfdSYm2nQ-7zfVNgX_9hrGdY_NJwROdea1-mqbyHUwYjvH3aCZyzxFQfUopzN1SYvtIXEeATeCrAYCazS7DLDoOpLy5A43HuB5Y1f1W3rczsJXnGEf7XDB02RiDGBcC-0cXnQT5dQTRQ4wT5IQeroaWtqzsi2Mrc8E_9cneH5O4DIeW4SSAGaswKNlCWRUqfoWaEaxyvHp6lMP1wWHf9zJoQb1vWxRV06ZYk8QGQsPrGa-SqIkPg">
+<div class="group glass-card tilt-card rounded-2xl overflow-hidden" data-aircraft-name="Gulfstream G650" data-aircraft-passengers="13-16 PAX" data-aircraft-range="7,000 NM" data-aircraft-image="https://lh3.googleusercontent.com/aida-public/AB6AXuC-UpxfdSYm2nQ-7zfVNgX_9hrGdY_NJwROdea1-mqbyHUwYjvH3aCZyzxFQfUopzN1SYvtIXEeATeCrAYCazS7DLDoOpLy5A43HuB5Y1f1W3rczsJXnGEf7XDB02RiDGBcC-0cXnQT5dQTRQ4wT5IQeroaWtqzsi2Mrc8E_9cneH5O4DIeW4SSAGaswKNlCWRUqfoWaEaxyvHp6lMP1wWHf9zJoQb1vWxRV06ZYk8QGQsPrGa-SqIkPg">
 <div class="aspect-[16/10] overflow-hidden">
 <div class="w-full h-full bg-cover bg-center group-hover:scale-105 transition-transform duration-700" data-alt="A Gulfstream G650ER climbing into a bright blue sky. The landing gear is retracting, and the wing flex is visible. The image captures the power and prestige associated with the Gulfstream brand. The lighting is high-contrast, emphasizing the white and navy livery." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC-UpxfdSYm2nQ-7zfVNgX_9hrGdY_NJwROdea1-mqbyHUwYjvH3aCZyzxFQfUopzN1SYvtIXEeATeCrAYCazS7DLDoOpLy5A43HuB5Y1f1W3rczsJXnGEf7XDB02RiDGBcC-0cXnQT5dQTRQ4wT5IQeroaWtqzsi2Mrc8E_9cneH5O4DIeW4SSAGaswKNlCWRUqfoWaEaxyvHp6lMP1wWHf9zJoQb1vWxRV06ZYk8QGQsPrGa-SqIkPg')"></div>
 </div>
@@ -439,45 +595,54 @@
 </div>
 </div>
 <div class="flex gap-4">
-<button class="flex-1 text-label-sm font-label-sm border border-outline-variant text-on-surface py-3 hover:bg-white/5 transition-colors view-aircraft-btn">VIEW AIRCRAFT</button>
-<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 hover:opacity-90">REQUEST QUOTE</button>
+<button class="flex-1 text-label-sm font-label-sm glass-pill rounded-lg border border-outline-variant text-on-surface py-3 btn-ghost-3d view-aircraft-btn">VIEW AIRCRAFT</button>
+<button class="flex-1 text-label-sm font-label-sm bg-secondary text-on-secondary py-3 rounded-lg btn-3d">REQUEST QUOTE</button>
 </div>
 </div>
 </div>
 </div>
 </section>
 <!-- Why Choose Us Section -->
-<section class="py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest" id="why-us">
-<div class="max-w-container-max mx-auto">
+<section class="relative py-section-gap px-margin-mobile md:px-margin-desktop bg-surface-container-lowest overflow-hidden" id="why-us">
+<div class="orb orb-gold w-96 h-96 top-10 -right-32" style="animation-delay: -6s;"></div>
+<div class="relative z-10 max-w-container-max mx-auto">
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
 <div>
 <span class="text-secondary font-label-sm text-label-sm uppercase tracking-widest block mb-4">The Advantage</span>
 <h2 class="font-headline-lg text-headline-lg text-white mb-8">Why Choose Us</h2>
 <p class="text-on-surface-variant mb-12">At The Charter Guy, we provide global access, rigorous safety vetting, and 24/7 white-glove service tailored to your exact needs.</p>
 <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-12">
-<div class="flex gap-4">
-<span class="material-symbols-outlined text-secondary text-2xl shrink-0">public</span>
+<div class="group flex gap-4">
+<div class="glass-icon w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-2xl">public</span>
+</div>
 <div>
 <h4 class="text-white font-semibold mb-2">Global Network</h4>
 <p class="text-sm text-on-surface-variant">Access to over 20,000 aircraft worldwide for total trip flexibility.</p>
 </div>
 </div>
-<div class="flex gap-4">
-<span class="material-symbols-outlined text-secondary text-2xl shrink-0">support_agent</span>
+<div class="group flex gap-4">
+<div class="glass-icon w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-2xl">support_agent</span>
+</div>
 <div>
 <h4 class="text-white font-semibold mb-2">24/7 Concierge Support</h4>
 <p class="text-sm text-on-surface-variant">Your dedicated broker is always available to handle routing, catering, and last-minute changes.</p>
 </div>
 </div>
-<div class="flex gap-4">
-<span class="material-symbols-outlined text-secondary text-2xl shrink-0">verified_user</span>
+<div class="group flex gap-4">
+<div class="glass-icon w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-2xl">verified_user</span>
+</div>
 <div>
 <h4 class="text-white font-semibold mb-2">Rigorous Safety Vetting</h4>
 <p class="text-sm text-on-surface-variant">We only partner with the safest operators in the industry.</p>
 </div>
 </div>
-<div class="flex gap-4">
-<span class="material-symbols-outlined text-secondary text-2xl shrink-0">person_add</span>
+<div class="group flex gap-4">
+<div class="glass-icon w-12 h-12 rounded-xl flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-secondary text-2xl">person_add</span>
+</div>
 <div>
 <h4 class="text-white font-semibold mb-2">Tailored Service</h4>
 <p class="text-sm text-on-surface-variant">Catering, ground transport, and onboard amenities personalized to your requirements.</p>
@@ -485,10 +650,12 @@
 </div>
 </div>
 </div>
-<div class="relative">
-<div class="aspect-square bg-secondary/5 absolute -top-8 -right-8 w-48 h-48 -z-10"></div>
-<div class="aspect-[4/5] overflow-hidden">
-<div class="w-full h-full bg-cover bg-center why-us-image" data-alt="A high-contrast, black and white lifestyle photograph of a professional aviation broker standing on a terminal balcony, looking out over a fleet of private jets at night. The broker is wearing a tailored charcoal suit. The image exudes confidence, maturity, and deep industry knowledge. The lighting is cinematic with deep shadows and bright highlights." data-image-url="https://lh3.googleusercontent.com/aida-public/AB6AXuAvS9EeOUlGXfz6lEfzkLpyaIj3jboT5a9nWc7DLKWjitDz9Xa_u4-AmxstEIlI1zizsmPvTDwxx3mQblej6BzxGzf5L0A1s4DrEF1-jjitrpwLeSLNyE3mX73CAaJl0NOyJf4PShtlv60WV3gLZOzW0WppWw3nAmr6KvJEsMvN-Y24sqDfeg4j4keccH68PUIrRplDo7TTCTuZk3uPZxCTHZn8ijsQecvxjZGCuoZuoSzDJTu0gQvMIA"></div>
+<div class="relative perspective-container">
+<div class="aspect-square bg-secondary/5 absolute -top-8 -right-8 w-48 h-48 -z-10 rounded-2xl"></div>
+<div class="glass-card tilt-card rounded-2xl p-3">
+<div class="aspect-[4/5] overflow-hidden rounded-xl">
+<div class="w-full h-full bg-cover bg-center why-us-image" data-alt="A high-contrast, black and white lifestyle photograph of a professional aviation broker standing on a terminal balcony, looking out over a fleet of private jets at night. The broker is wearing a tailored charcoal suit. The image exudes confidence, maturity, and deep industry knowledge. The lighting is cinematic with deep shadows and bright highlights." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAvS9EeOUlGXfz6lEfzkLpyaIj3jboT5a9nWc7DLKWjitDz9Xa_u4-AmxstEIlI1zizsmPvTDwxx3mQblej6BzxGzf5L0A1s4DrEF1-jjitrpwLeSLNyE3mX73CAaJl0NOyJf4PShtlv60WV3gLZOzW0WppWw3nAmr6KvJEsMvN-Y24sqDfeg4j4keccH68PUIrRplDo7TTCTuZk3uPZxCTHZn8ijsQecvxjZGCuoZuoSzDJTu0gQvMIA')"></div>
+</div>
 </div>
 </div>
 </div>
@@ -502,7 +669,7 @@
 <p class="text-on-surface-variant mb-12">Ready to fly or discuss your aviation portfolio? Reach out to The Charter Guy today for a free, no-obligation quote or a consultation on your next aircraft acquisition and private charters.</p>
 <div class="space-y-6">
 <div class="flex items-center gap-4">
-<div class="w-12 h-12 bg-secondary/10 flex items-center justify-center">
+<div class="glass-icon w-12 h-12 rounded-xl flex items-center justify-center">
 <span class="material-symbols-outlined text-secondary">phone</span>
 </div>
 <div>
@@ -511,7 +678,7 @@
 </div>
 </div>
 <div class="flex items-center gap-4">
-<div class="w-12 h-12 bg-secondary/10 flex items-center justify-center">
+<div class="glass-icon w-12 h-12 rounded-xl flex items-center justify-center">
 <span class="material-symbols-outlined text-secondary">mail</span>
 </div>
 <div>
@@ -521,7 +688,7 @@
 </div>
 </div>
 </div>
-<div class="lg:col-span-7 bg-surface-container-low p-10 md:p-16">
+<div class="lg:col-span-7 glass-panel rounded-2xl p-10 md:p-16">
 <form class="space-y-10">
 <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
 <div class="relative">
@@ -540,7 +707,7 @@
 </div>
 <div class="relative">
 <label class="text-[10px] uppercase tracking-widest text-secondary block mb-2">Inquiry Type</label>
-<select class="w-full underline-input text-white bg-transparent" aria-label="Inquiry Type" title="Inquiry Type"></select>
+<select class="w-full underline-input text-white bg-transparent" aria-label="Inquiry Type" title="Inquiry Type">
 <option class="bg-background">On-Demand Charter</option>
 <option class="bg-background">Aircraft Acquisition</option>
 <option class="bg-background">Aircraft Sales</option>
@@ -552,7 +719,7 @@
 <label class="text-[10px] uppercase tracking-widest text-secondary block mb-2">Message / Mission Profile</label>
 <textarea class="w-full underline-input text-white resize-none" placeholder="Provide details about your trip or acquisition needs..." rows="4"></textarea>
 </div>
-<button class="w-full bg-secondary text-on-secondary py-5 font-label-sm text-label-sm gold-glow hover:opacity-90 transition-all" type="submit">
+<button class="w-full bg-secondary text-on-secondary py-5 font-label-sm text-label-sm rounded-lg btn-3d" type="submit">
                         SEND INQUIRY
                     </button>
 </form>
@@ -619,7 +786,7 @@
     <button class="absolute top-6 right-6 text-white hover:text-secondary transition-colors z-10" id="close-modal-btn">
         <span class="material-symbols-outlined text-4xl">close</span>
     </button>
-    <div class="w-full max-w-4xl bg-surface-container-low border border-outline-variant/20 rounded-xl overflow-hidden shadow-2xl" id="modal-content">
+    <div class="w-full max-w-4xl glass-panel rounded-2xl overflow-hidden" id="modal-content">
     </div>
 </div>
 <script>
@@ -728,5 +895,20 @@
                 closeModal();
             }
         });
+
+        // 3D tilt-on-hover for glass cards (desktop pointers only)
+        if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+                    card.style.transform = `translateY(-8px) rotateX(${(-y * 6).toFixed(2)}deg) rotateY(${(x * 6).toFixed(2)}deg)`;
+                });
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = '';
+                });
+            });
+        }
     </script>
 </body></html>
